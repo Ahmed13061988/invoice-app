@@ -20,13 +20,14 @@ for i in files_path:
     pdf.set_font(family="Times", size=16, style="B")
     pdf.cell(w=50, h=8, txt=f"Date: {date}", ln=1)
 
-    columns = list(df.columns)
+    columns = df.columns
+    columns = [item.replace("_", " ").title() for item in columns]
     pdf.set_font(family="Times", size=10, style="B")
-    pdf.cell(w=30, h=8, txt=columns[0].replace("_", " ").title(), border=1)
-    pdf.cell(w=70, h=8, txt=columns[1].replace("_", " ").title(), border=1)
-    pdf.cell(w=33, h=8, txt=columns[2].replace("_", " ").title(), border=1)
-    pdf.cell(w=30, h=8, txt=columns[3].replace("_", " ").title(), border=1)
-    pdf.cell(w=30, h=8, txt=columns[4].replace("_", " ").title(), border=1, ln=1)
+    pdf.cell(w=30, h=8, txt=columns[0], border=1)
+    pdf.cell(w=70, h=8, txt=columns[1], border=1)
+    pdf.cell(w=33, h=8, txt=columns[2], border=1)
+    pdf.cell(w=30, h=8, txt=columns[3], border=1)
+    pdf.cell(w=30, h=8, txt=columns[4], border=1, ln=1)
 
     for index, row in df.iterrows():
         pdf.set_font(family="Times", size=10)
@@ -36,5 +37,20 @@ for i in files_path:
         pdf.cell(w=33, h=8, txt=str(row["amount_purchased"]), border=1)
         pdf.cell(w=30, h=8, txt=str(row["price_per_unit"]), border=1)
         pdf.cell(w=30, h=8, txt=str(row["total_price"]), border=1, ln=1)
+
+    total_price = df["total_price"].sum()
+
+    pdf.cell(w=30, h=8, txt=" ", border=1)
+    pdf.cell(w=70, h=8, txt=" ", border=1)
+    pdf.cell(w=33, h=8, txt=" ", border=1)
+    pdf.cell(w=30, h=8, txt=" ", border=1)
+    pdf.cell(w=30, h=8, txt=f"{total_price}", border=1, ln=1)
+
+    pdf.set_font(family="Times", size=10, style="B")
+    pdf.cell(w=30, h=8, txt=f"The total amount due is {total_price} Euros", ln=1)
+
+    pdf.set_font(family="Times", size=14, style="B")
+    pdf.cell(w=25, h=8, txt="PythonHow")
+    pdf.image("pythonhow.png", w=10, h=8)
 
     pdf.output(f"results/{filename}.pdf")
